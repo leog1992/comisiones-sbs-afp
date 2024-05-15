@@ -24,24 +24,38 @@ async function ComisionSbs(req, res) {
     $('tr.JER_filaContenido > td').toArray().map(item => {
         arr.push($(item).text().trim().replace("%", ""))
     });
-    for (var i = 0; i < arr.length; i++) {
-        if (i == 0 || i == 8 || i == 16 || i == 24) {
+    //console.log(JSON.stringify(arr))
+    for (let i = 0; i < arr.length; i++) {
+        //console.log( i + " = " + arr[i] )
+        if (i === 0 || i === 6 || i === 12 || i === 18) {
+            //console.log(i + " = " + arr[i + 5] + " numero" + parseFloat(arr[i + 5]))
             models.push({
                 NombreComision: arr[i],
-                ComisionFija: Number(arr[i + 1]),
-                ComisionSobreFlujo: Number(arr[i + 2]),
-                ComisionSobreFlujoMixta: Number(arr[i + 3]),
-                ComisionAnualMixta: Number(arr[i + 4]),
-                PrimaSeguro: Number(arr[i + 5]),
-                AporteObligatorio: Number(arr[i + 6]),
-                RemuneracionMaxima: Number(arr[i + 7].replace(",", ""))
+                ComisionFija: 0,
+                ComisionSobreFlujo: parseFloat(arr[i + 1].replace(",", ".")),
+                ComisionSobreFlujoMixta: 0,
+                ComisionAnualMixta: parseFloat(arr[i + 2].replace(",", ".")),
+                PrimaSeguro: parseFloat(arr[i + 3].replace(",", ".")),
+                AporteObligatorio: parseFloat(arr[i + 4].replace(",", ".")),
+                RemuneracionMaxima: parseFloat(arr[i + 5].replace(" ", "").replace(",", "."))
             });
-            i = i + 7;
+            //i = i + 6;
         }
     }
-    res.status(200).send({ items: models });
+
+    /*
+    NombreComision: arr[i],
+        ComisionFija: Number(arr[i + 1]),
+        ComisionSobreFlujo: Number(arr[i + 2]),
+        ComisionSobreFlujoMixta: Number(arr[i + 3]),
+        ComisionAnualMixta: Number(arr[i + 4]),
+        PrimaSeguro: Number(arr[i + 5]),
+        AporteObligatorio: Number(arr[i + 6]),
+        RemuneracionMaxima: Number(arr[i + 7].replace(",", ""))
+    */
+    res.status(200).send({items: models});
     await browser.close();
-    
+
     // await puppeteer.launch({
     //     'args': [
     //         '--no-sandbox',
